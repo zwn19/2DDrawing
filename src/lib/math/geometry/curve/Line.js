@@ -125,7 +125,7 @@ Line.getLineByTwoPoints = function(p1,p2) {
         let k = (p2.y - p1.y) / (p2.x - p1.x);
         return Line.getLineByKAndPoint(k, p1);
     }
-    return new Line(0,1,p1.y);
+    return new Line(1,0,p1.x);
 };
 Line.getLineByKAndPoint = function(k,point) {
     let c = point.y - k * point.x;

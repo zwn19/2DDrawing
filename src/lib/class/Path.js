@@ -44,21 +44,25 @@ class Path extends Entity{
         funcs.forEach((f, index) => {
             switch (f.name) {
                 case "M": {
-                    current.set(f.args[0] * 1, f.args[1] * 1);
-                    pathCommands.push({
-                        name: "moveTo",
-                        args: [current.copy()],
-                    });
-                    pathStart = current.copy();
+                    for(let i=0;i<f.args.length;i=i+2) {
+                        current.set(f.args[i] * 1, f.args[i+1] * 1);
+                        pathCommands.push({
+                            name: "moveTo",
+                            args: [current.copy()],
+                        });
+                        pathStart = current.copy();
+                    }
                     return;
                 }
                 case "m": {
-                    current.move(f.args[0] * 1, f.args[1] * 1);
-                    pathCommands.push({
-                        name: "moveTo",
-                        args: [current.copy()],
-                    });
-                    pathStart = current.copy();
+                    for(let i=0;i<f.args.length;i=i+2) {
+                        current.move(f.args[i] * 1, f.args[i+1] * 1);
+                        pathCommands.push({
+                            name: "moveTo",
+                            args: [current.copy()],
+                        });
+                        pathStart = current.copy();
+                    }
                     return;
                 }
                 case "L": {
@@ -84,35 +88,47 @@ class Path extends Entity{
                     return;
                 }
                 case "H": {
-                    current.set(f.args[0] * 1, current.y);
-                    pathCommands.push({
-                        name: "lineTo",
-                        args: [current.copy()],
-                    });
+                    while (f.args.length) {
+                        const args = f.args.splice(0, 1);
+                        current.set(args[0] * 1, current.y);
+                        pathCommands.push({
+                            name: "lineTo",
+                            args: [current.copy()],
+                        });
+                    }
                     return;
                 }
                 case "h": {
-                    current.move(f.args[0] * 1);
-                    pathCommands.push({
-                        name: "lineTo",
-                        args: [current.copy()],
-                    });
+                    while (f.args.length) {
+                        const args = f.args.splice(0, 1);
+                        current.move(args[0] * 1);
+                        pathCommands.push({
+                            name: "lineTo",
+                            args: [current.copy()],
+                        });
+                    }
                     return;
                 }
                 case "V": {
-                    current.set(current.x, f.args[0] * 1);
-                    pathCommands.push({
-                        name: "lineTo",
-                        args: [current.copy()],
-                    });
+                    while (f.args.length) {
+                        const args = f.args.splice(0, 1);
+                        current.set(current.x, args[0] * 1);
+                        pathCommands.push({
+                            name: "lineTo",
+                            args: [current.copy()],
+                        });
+                    }
                     return;
                 }
                 case "v": {
-                    current.move(0, f.args[0] * 1);
-                    pathCommands.push({
-                        name: "lineTo",
-                        args: [current.copy()],
-                    });
+                    while (f.args.length) {
+                        const args = f.args.splice(0, 1);
+                        current.move(0, args[0] * 1);
+                        pathCommands.push({
+                            name: "lineTo",
+                            args: [current.copy()],
+                        });
+                    }
                     return;
                 }
                 case "c": {
@@ -272,35 +288,83 @@ class Path extends Entity{
                 }
                 case "a": {
                     let _args = f.args;
-                    return;
                     while (_args.length) {
-                        const [rx, ry, xAxisRotation, largeArcFlag, sweepFlag, x, y] = _args.splice(0, 7).map(i => i * 1);
+                        let [rx, ry, xAxisRotation, largeArcFlag, sweepFlag, x, y] = _args.splice(0, 7).map(i => i * 1);
                         const ctrl = current.copy();
-                        const data = svgArcToCenterParam(ctrl.x, ctrl.y, rx, ry, xAxisRotation, largeArcFlag, sweepFlag, current.x, current.y);
-                        let {
-                            endAngle,
-                            startAngle,
-                        } = data;
-                        const {
-                            clockwise,
-                            cx,
-                            cy,
-                        } = data;
-                        if (endAngle < 0) {
-                            endAngle += Math.PI * 2;
-                        } if (startAngle < 0) {
-                            startAngle += Math.PI * 2;
-                        }
                         current.move(x, y);
-                        if (rx && ry && Math.abs(rx - ry) <= 0.02) {
+                        // 直线
+                        if(rx === 0) {
+                            pathCommands.push({
+                                name: "lineTo",
+                                args: [current.copy()],
+                            });
+                        }
+                        // 圆弧
+                        else if (Math.abs(rx - ry) <= 0.1) {
+                            let radius = rx;
+                            let curve = new LineSegment(ctrl, current);
+                            let a = curve.length() / 2;
+                            let len = Math.sqrt(radius * radius - a * a);
+                            let cross = curve.getCenter();
+                            let centers = curve.line.getNormalLine(cross).getPointsByPointLength(cross, len);
+                            let circle1 = new Circle(centers[0], radius);
+                            let circle2 = new Circle(centers[1], radius);
+                            let subCircles1 = circle1.splitByPoints([ctrl, current]);
+                            let subCircles2 = circle2.splitByPoints([ctrl, current]);
+                            let subCircles = [...subCircles1,...subCircles2];
+                            if (largeArcFlag) {
+                                subCircles = subCircles.filter(c => {
+                                    return c.getAbsAngle() > Math.PI;
+                                });
+                            } else {
+                                subCircles = subCircles.filter(c => {
+                                    return c.getAbsAngle() < Math.PI;
+                                });
+                            }
+                            let circleCurve;
+                            if (sweepFlag) {
+                                circleCurve = subCircles.find(c => !c.isReverse(ctrl,current,largeArcFlag));
+                            } else {
+                                circleCurve = subCircles.find(c => c.isReverse(ctrl,current,largeArcFlag));
+                            }
+                            let startAngle = circleCurve.getPointAngle(ctrl);
+                            let endAngle = circleCurve.getPointAngle(current);
+                            let center = circleCurve.getCenter();
+                            //svg canvas 画圆弧顺逆时针方向相反
                             pathCommands.push({
                                 name: "arc",
-                                args: [cx, cy, rx, startAngle, endAngle, !clockwise],
+                                args: [center.x, center.y, radius, startAngle, endAngle, !sweepFlag],
                             });
-                        } else {
-                            pathCommands.push({
-                                name: "ellipse",
-                                args: [cx, cy, rx, ry, startAngle, endAngle, !clockwise],
+                        } else {// 椭圆弧
+                            // 椭圆圆心所在椭圆
+                            let curve1 = new EllipseCurve(current,rx,ry);
+                            let curve2 = new EllipseCurve(ctrl,rx,ry);
+                            let _centers = calculateCrossPoints(curve1,curve2);
+                            let ellipse1 = new EllipseCurve(_centers[0], rx,ry);
+                            let ellipse2 = new EllipseCurve(_centers[1], rx,ry);
+                            let subCurve1 = ellipse1.splitByPoints([ctrl, current]);
+                            let subCurve2 = ellipse2.splitByPoints([ctrl, current]);
+                            let subCurves = [...subCurve1,...subCurve2];
+                            if (largeArcFlag) {
+                                subCurves = subCurves.filter(c => {
+                                    return c.getAbsAngle() > Math.PI;
+                                });
+                            } else {
+                                subCurves = subCurves.filter(c => {
+                                    return c.getAbsAngle() < Math.PI;
+                                });
+                            }
+                            let circleCurve;
+                            if (sweepFlag) {
+                                circleCurve = subCurves.find(c => !c.isReverse(ctrl,current,largeArcFlag));
+                            } else {
+                                circleCurve = subCurves.find(c => c.isReverse(ctrl,current,largeArcFlag));
+                            }
+                            circleCurve.generatePoints().forEach(p => {
+                                pathCommands.push({
+                                    name: "lineTo",
+                                    args: [p],
+                                });
                             });
                         }
                     }
@@ -312,8 +376,14 @@ class Path extends Entity{
                         let [rx, ry, xAxisRotation, largeArcFlag, sweepFlag, x, y] = _args.splice(0, 7).map(i => i * 1);
                         const ctrl = current.copy();
                         current.set(x, y);
+                        if(rx === 0) {
+                            pathCommands.push({
+                                name: "lineTo",
+                                args: [current.copy()],
+                            });
+                        }
                         // 圆弧
-                        if (rx === ry) {
+                        else if (Math.abs(rx - ry) <= 0.1) {
                             let radius = rx;
                             let curve = new LineSegment(ctrl, current);
                             let a = curve.length() / 2;
@@ -418,7 +488,6 @@ class Path extends Entity{
                 case "lineTo": {
                     const p = c.args[0];
                     context.lineTo(p.x, p.y);
-                    console.log(c.name,p.x, p.y);
                     return;
                 }
                 case "bezierCurveTo": {

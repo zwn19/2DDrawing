@@ -1,4 +1,4 @@
-import Point from "../../../lib/math/point";
+import Point from "./geometry/point";
 import Vector from "./geometry/Vector";
 
 const TOLERANCE = 0.001;
