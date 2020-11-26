@@ -41,7 +41,7 @@ class Text extends Group{
         let strokeWidth = this.getStyle("stroke-width");
         let miterLimit = this.getProps("stroke-miterlimit");
         let opacity = this.getComputedStyle("opacity");
-        let fontSize = this.getComputedStyle("font-size") || 14;
+        let fontSize = this.getComputedStyle("font-size") || "14px";
         let family = this.getComputedStyle("font-family") || "Arial";
         let anchor = this.getProps("text-anchor");
         let mode = this.getProps("writing-mode")
@@ -70,7 +70,7 @@ class Text extends Group{
         context.transform.apply(context, m.toCSSMatrixArray());
         let font = [];
         if (fontSize) {
-            font.push(`${Math.round(fontSize * 1)}px`)
+            font.push(fontSize)
         }
         if (family) {
             font.push(family)

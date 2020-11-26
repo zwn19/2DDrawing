@@ -62,8 +62,8 @@ class Element {
         return this.style[this.camelCaseName(name)];
     }
     getComputedStyle(key) {
-        let val = this.getStyle(name)
-        if (!val) {
+        let val = this.getStyle(key)
+        if (val) {
             return val;
         } else if(this.parentNode){
             return this.parentNode.getComputedStyle(key);
