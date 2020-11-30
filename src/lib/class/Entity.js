@@ -54,6 +54,10 @@ class Entity extends Element{
             context.save();
             context.transform.apply(context, m.toCSSMatrixArray());
             let fill = this.getStyle("fill");
+            let opacity = this.getStyle("opacity");
+            if (opacity) {
+                context.globalAlpha = opacity;
+            }
             let stroke = this.getStyle("stroke");
             let strokeWidth = this.getStyle("stroke-width");
             if (stroke && stroke !== "none") {
