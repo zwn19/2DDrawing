@@ -86,6 +86,20 @@ function resolveQuadraticEquation(a,b,c) {
     return [x1,x2];
 }
 
+function pushToArray(array, items) {
+    if (!items.forEach) {
+        if (!array.find(i => i.equals(items))) {
+            array.push(items);
+        }
+    } else {
+        items.forEach((item) => {
+            if (!array.find(i => i.equals(item))) {
+                array.push(item);
+            }
+        });
+    }
+}
+
 export {
     roundRadian,
     roundAngle,
@@ -98,5 +112,6 @@ export {
     getPointsCenter,
     sortPoints,
     isPositivePolarAngle,
-    resolveQuadraticEquation
+    resolveQuadraticEquation,
+    pushToArray
 }

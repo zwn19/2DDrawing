@@ -27,6 +27,11 @@ class Scene {
     getAspectRatio() {
         return this.size.width / this.size.height;
     }
+
+    usePlugin(plugin) {
+        plugin.init(this);
+    }
+
     setSize({width,height}) {
         this.size.width = parseFloat(width);
         this.size.height = parseFloat(height);

@@ -1,7 +1,7 @@
 /* eslint-disable */
 import Point from "../Point";
 import LineSegment from "./LineSegment";
-import {roundRadian, toDegree} from "../../utils"
+import {roundRadian, toDegree, uniqueArray} from "../../utils"
 import Range from "../Range"
 import PolarCoordinateSystem from "../PolarCoordinateSystem";
 let Tolerance = new Range(1 - 0.001,1 + 0.001);
@@ -74,7 +74,7 @@ class Circle {
     getX(y) {
         let theta = Math.asin(y / this.radius);
         let angles = [theta,Math.PI-theta].filter(p => this.isAngleInRange(p));
-        let ret = Utils.uniqueArray(angles).map(ang => {
+        let ret = uniqueArray(angles).map(ang => {
             return this.radius * Math.cos(ang);
         });
         return ret;
@@ -83,7 +83,7 @@ class Circle {
         let theta = Math.acos(x / this.radius);
         let angles = [theta,-theta];
         angles = angles.filter(p => this.isAngleInRange(p));
-        let ret = Utils.uniqueArray(angles).map(ang => {
+        let ret = uniqueArray(angles).map(ang => {
             return this.radius * Math.sin(ang);
         });
         return ret;

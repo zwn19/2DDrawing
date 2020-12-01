@@ -32,7 +32,7 @@ class Group extends Element{
         this.addChildren(children);
     }
 
-    prependhild(c) {
+    prependChild(c) {
         this.children.unshift(c);
         c.parentNode = this;
     }
@@ -61,6 +61,14 @@ class Group extends Element{
             c.toCanvas(context);
         });
         context.restore();
+    }
+    eachChild(fn) {
+        this.children.forEach(c => {
+          fn(c);
+          if(c.isGroup()) {
+              c.eachChild(fn);
+          }
+        })
     }
 }
 export default Group;

@@ -1,7 +1,8 @@
 /* eslint-disable */
 import Element from "./Element";
 import Color from "../utils/Color";
-import {getPointsCenter} from "../math/utils";
+import {getPointsCenter, pushToArray} from "../math/utils";
+import Ray from "../math/geometry/curve/Ray";
 
 class Entity extends Element{
     constructor(attrs,style) {
@@ -36,6 +37,20 @@ class Entity extends Element{
     getBoundaries() {
         let lines = this.getGeometry().getLines();
         return lines;
+    }
+    isInArea({x,y}) {
+        // 射线法判断是否在多边形内
+        let lines = this.getBoundaries();
+        const _zero = { x: -10000 * Math.random(), y: -10000 * Math.random() };
+        const line = new Ray({x,y},_zero);
+        let crossPoints = [];
+        lines.forEach(l => {
+            let point = l.getCrossPoint(line);
+            if (point) {
+                pushToArray(crossPoints, point);
+            }
+        });
+        return crossPoints.length % 2;
     }
     drawPath(context) {
         let points = this.geometry.getPoints();

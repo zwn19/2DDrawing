@@ -3,12 +3,8 @@
 import BezierCurve from "../geometry/curve/BezierCurve";
 import LineSegment from "../geometry/curve/LineSegment";
 import Circle from "../geometry/curve/Circle";
-import Ellipse from "../geometry/curve/Ellipse";
 import UniqueArray from "../../utils/UniqueArray";
-import Polygon from "./Polygon";
-import Utils, {getPointsCenter} from "../utils";
-import Point from "../geometry/Point";
-
+import {getPointsCenter} from "../utils";
 
 class Path {
     constructor(commands) {
@@ -80,6 +76,12 @@ class Path {
         let commands = this.commands;
         let _commands = [];
         commands.forEach(cmd => {
+            if (cmd.name === "arc") {
+                let [cx, cy, radius, startAngle, endAngle] = cmd.args;
+                let circle = new Circle({x:cx,y:cy},radius,startAngle,endAngle - startAngle);
+
+                return;
+            }
             _commands.push({
                 name: cmd.name,
                 args: cmd.args.map(p => p.applyMatrix(matrix))

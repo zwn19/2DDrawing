@@ -22,6 +22,7 @@ import {isPositivePolarAngle, sortPoints, toDegree} from "./lib/math/utils";
 import EllipseCurve from "./lib/math/geometry/curve/Ellipse";
 import Range2D from "./lib/math/geometry/Range2D";
 import EllipseEntity from "./lib/class/Ellipse";
+import EventManager from "./lib/class/plugins/EventManager";
 
 function showPoint({x,y},matrix) {
     let canvas = document.getElementsByTagName("canvas")[0];
@@ -60,7 +61,9 @@ let object = getSVGElement(rootDom.outerHTML);
 // object.setChildren([c1,c2,entity1])
 console.log(object)
 let scene = new Scene(document.getElementById("scene"),object);
-scene.useCanvasMode();
-//scene.useSVGMode();
+let em = new EventManager();
+scene.usePlugin(em);
+// scene.useCanvasMode();
+// scene.useSVGMode();
 // scene.addComponent(rect);
 scene.draw();

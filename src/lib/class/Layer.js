@@ -1,6 +1,7 @@
 /* eslint-disable */
 import Root from "./Root";
 import Matrix from "../math/Matrix";
+import CoordinateSystem from "../math/geometry/CoordinateSystem";
 
 const AlignMatrixStrategies = {
     "left-top" () {
@@ -114,6 +115,7 @@ class Layer {
         this.containerSize = {};
         this.setContainerSize(containerSize);
         this.updateMatrix();
+        this.coord = new CoordinateSystem(this.matrix);
         switch (this.mode) {
             case "svg": {
                 this.useSVGMode();

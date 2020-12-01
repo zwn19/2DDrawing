@@ -478,7 +478,6 @@ class Path extends Entity{
     drawPath(context) {
         context.beginPath();
         this.geometry.commands.forEach((c) => {
-            console.log(c);
             switch (c.name) {
                 case "moveTo": {
                     const p = c.args[0];
