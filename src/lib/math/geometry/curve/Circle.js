@@ -1,9 +1,10 @@
 /* eslint-disable */
-import Point from "../Point";
+import Point from "../base/Point";
 import LineSegment from "./LineSegment";
 import {roundRadian, toDegree, uniqueArray} from "../../utils"
-import Range from "../Range"
-import PolarCoordinateSystem from "../PolarCoordinateSystem";
+import Range from "../base/Range"
+import PolarCoordinateSystem from "../base/PolarCoordinateSystem";
+import Vector from "../base/Vector";
 let Tolerance = new Range(1 - 0.001,1 + 0.001);
 class Circle {
     constructor(center,radius,startAngle = 0,deltaAngle = Math.PI * 2) {
@@ -15,6 +16,12 @@ class Circle {
         this.polarSystem = new PolarCoordinateSystem(this.center);
         this.start = startAngle;
         this.end = endAngle;
+    }
+    getStartPoint() {
+        return this.getPointByAngle(this.start);
+    }
+    getEndPoint() {
+        return this.getPointByAngle(this.end);
     }
     getAbsAngle() {
         let { min, max } = this.angleRange;
@@ -137,6 +144,18 @@ class Circle {
             return delta <= Math.PI;
         }
         return delta > Math.PI;
+    }
+    applyMatrix(matrix) {
+        let center = this.getCenter();
+        let _center = center.applyMatrix(matrix);
+        let start = this.getStartPoint();
+        let _start = start.applyMatrix(matrix);
+        let line = Vector.fromTwoPoints(center,start);
+        let _line = Vector.fromTwoPoints(_center,_start);
+        let deltaAngle = _line.getCrossAngle(line)
+        let _startAngle = this.start + deltaAngle;
+        let radius = start.distanceTo(center);
+        return new Circle(center,radius, _startAngle , _startAngle + (this.end - this.start))
     }
 }
 export default Circle;

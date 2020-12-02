@@ -1,7 +1,7 @@
 /* eslint-disable */
 import Rectangle from "./Rectangle";
 import Matrix from "../math/Matrix";
-import RectArea from "../math/geometry/RectArea";
+import RectArea from "../math/geometry/base/RectArea";
 const ALIGN_STRATEGY = function (type,imageSize,viewportSize){
     if (type === "none") {
         let scalex = viewportSize.width / imageSize.width;

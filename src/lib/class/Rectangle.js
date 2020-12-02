@@ -1,6 +1,6 @@
 /* eslint-disable */
 import Entity from "./Entity";
-import Rectangle2d from "../math/2d/Rectangle";
+import Rectangle2d from "../math/geometry/2d/Rectangle";
 import Polygon from "./Polygon";
 
 class Rectangle extends Entity{

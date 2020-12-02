@@ -1,9 +1,9 @@
 /* eslint-disable */
-import Point from "../Point";
+import Point from "../base/Point";
 import LineSegment from "./LineSegment";
 import {roundRadian, toDegree} from "../../utils"
-import Range from "../Range"
-import PolarCoordinateSystem from "../PolarCoordinateSystem";
+import Range from "../base/Range"
+import PolarCoordinateSystem from "../base/PolarCoordinateSystem";
 // x^2/a + y^2/b = 1;
 let Tolerance = new Range(1 - 0.005,1 + 0.005);
 class Ellipse {
@@ -123,6 +123,9 @@ class Ellipse {
         let y = point.y - this.center.y;
         let del = x * x / this.a / this.a + y * y / this.b / this.b;
         return Tolerance.isInRange(del);
+    }
+    applyMatrix(matrix) {
+
     }
 }
 export default Ellipse;

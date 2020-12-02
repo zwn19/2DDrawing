@@ -1,7 +1,7 @@
 /* eslint-disable */
 import Line from "./Line";
-import Range2D from "../Range2D";
-import Point from "../Point";
+import Range2D from "../base/Range2D";
+import Point from "../base/Point";
 import Ray from "./Ray";
 import Matrix from "../../Matrix";
 
@@ -109,6 +109,9 @@ class LineSegment {
     }
     getNormalLine(point) {
         return this.line.getNormalLine(point);
+    }
+    applyMatrix(matrix) {
+
     }
 }
 export default LineSegment;

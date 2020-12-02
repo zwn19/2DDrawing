@@ -1,7 +1,7 @@
 /* eslint-disable */
 import Matrix from "../../Matrix"
-import Point from "../Point";
-import Range from "../Range";
+import Point from "../base/Point";
+import Range from "../base/Range";
 import Ray from "./Ray";
 import LineSegment from "./LineSegment";
 // ax+by=c;
@@ -118,6 +118,9 @@ class Line{
     distanceToPoint(point) {
         let p = this.getNormalPoint(point);
         return p.distanceTo(point);
+    }
+    applyMatrix(matrix) {
+
     }
 }
 Line.getLineByTwoPoints = function(p1,p2) {

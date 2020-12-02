@@ -1,8 +1,8 @@
 /* eslint-disable */
 
-import LineSegment from "../geometry/curve/LineSegment";
-import Point from "../geometry/Point";
-import { getPointsCenter } from "../utils";
+import LineSegment from "../curve/LineSegment";
+import Point from "../base/Point";
+import { getPointsCenter } from "../../utils";
 
 class Polygon {
     constructor(points) {

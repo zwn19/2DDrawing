@@ -1,6 +1,6 @@
 /* eslint-disable */
 import Entity from "./Entity";
-import Polyline2d from "../math/2d/Polyline";
+import Polyline2d from "../math/geometry/2d/Polyline";
 
 class Polyline extends Entity{
     constructor(attrs, style) {

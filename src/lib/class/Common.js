@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import Group from "./Group";
-import Point from "../math/geometry/Point";
+import Point from "../math/geometry/base/Point";
 import Polyline from "./Polyline";
 import Polygon from "./Polygon";
 import Ellipse from "./Ellipse";

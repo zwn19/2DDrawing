@@ -1,6 +1,6 @@
 /* eslint-disable */
 import Point from "./Point";
-import LineSegment from "./curve/LineSegment";
+import LineSegment from "../curve/LineSegment";
 
 class RectArea {
     constructor(start,{ width, height }) {

@@ -1,6 +1,6 @@
 /* eslint-disable */
 import Entity from "./Entity";
-import Ellipse2d from "../math/2d/Ellipse";
+import Ellipse2d from "../math/geometry/2d/Ellipse";
 
 class Ellipse extends Entity{
     constructor(attrs, style) {

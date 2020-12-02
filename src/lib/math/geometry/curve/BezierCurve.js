@@ -1,5 +1,5 @@
 /* eslint-disable */
-import Point from "../Point";
+import Point from "../base/Point";
 import LineSegment from "./LineSegment";
 
 class BezierCurve {
@@ -74,6 +74,9 @@ class BezierCurve {
     }
     isInCurve(p) {
         return !!this.lines.find(line => line.isInCurve(p));
+    }
+    applyMatrix(matrix) {
+
     }
 }
 

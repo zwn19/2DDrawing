@@ -1,8 +1,8 @@
 /* eslint-disable */
 import Entity from "./Entity";
-import Polygon2d from "../math/2d/Polygon";
-import Vector from "../math/geometry/Vector";
-import Angle from "../math/2d/Angle";
+import Polygon2d from "../math/geometry/2d/Polygon";
+import Vector from "../math/geometry/base/Vector";
+import Angle from "../math/geometry/2d/Angle";
 import UniqueArray from "../utils/UniqueArray";
 import { sortPoints } from "../math/utils";
 import Path from "./Path";

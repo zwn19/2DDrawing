@@ -1,13 +1,13 @@
 /* eslint-disable */
 import Entity from "./Entity";
-import Point from "../math/geometry/Point";
-import Path2d from "../math/2d/Path";
+import Point from "../math/geometry/base/Point";
+import Path2d from "../math/geometry/2d/Path";
 import LineSegment from "../math/geometry/curve/LineSegment";
 import EllipseCurve from "../math/geometry/curve/Ellipse";
 import Circle from "../math/geometry/curve/Circle";
-import PolarCoordinateSystem from "../math/geometry/PolarCoordinateSystem";
+import PolarCoordinateSystem from "../math/geometry/base/PolarCoordinateSystem";
 import Utils from "../math/utils"
-import Ellipse from "../math/2d/Ellipse";
+import Ellipse from "../math/geometry/2d/Ellipse";
 import {calculateCrossPoints} from "../math/geometry/curve";
 
 class Path extends Entity{

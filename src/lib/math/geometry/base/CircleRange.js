@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { distance } from "../utils";
+import { distance } from "../../utils";
 
 class CircleRange {
     constructor(point,radius) {

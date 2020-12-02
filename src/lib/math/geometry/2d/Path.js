@@ -1,10 +1,10 @@
 /* eslint-disable */
 
-import BezierCurve from "../geometry/curve/BezierCurve";
-import LineSegment from "../geometry/curve/LineSegment";
-import Circle from "../geometry/curve/Circle";
-import UniqueArray from "../../utils/UniqueArray";
-import {getPointsCenter} from "../utils";
+import BezierCurve from "../curve/BezierCurve";
+import LineSegment from "../curve/LineSegment";
+import Circle from "../curve/Circle";
+import UniqueArray from "../../../utils/UniqueArray";
+import {getPointsCenter} from "../../utils";
 
 class Path {
     constructor(commands) {
@@ -79,13 +79,29 @@ class Path {
             if (cmd.name === "arc") {
                 let [cx, cy, radius, startAngle, endAngle] = cmd.args;
                 let circle = new Circle({x:cx,y:cy},radius,startAngle,endAngle - startAngle);
-
+                circle = circle.applyMatrix(matrix)
+                _commands.push({
+                    name: cmd.name,
+                    args: [circle.center.x,circle.center.y,circle.radius,circle.start,circle.end]
+                });
                 return;
             }
-            _commands.push({
-                name: cmd.name,
-                args: cmd.args.map(p => p.applyMatrix(matrix))
-            });
+            if (cmd.name === "closePath") {
+                _commands.push({
+                    name: cmd.name,
+                    args: []
+                });
+                return;
+            }
+            try {
+                _commands.push({
+                    name: cmd.name,
+                    args: cmd.args.map(p => p.applyMatrix(matrix))
+                });
+            } catch (e){
+                console.error(e);
+                console.log(cmd.name)
+            }
         });
         return new Path(_commands);
     }

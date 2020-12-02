@@ -1,5 +1,5 @@
 import Hammer from "hammerjs";
-import Point from "../../math/geometry/Point";
+import Point from "../../math/geometry/base/Point";
 import Circle from "../Circle";
 
 class EventManager{
@@ -28,11 +28,10 @@ class EventManager{
                     fill: "red"
                 })
                 layer.root.addChild(circle);
-                layer.root.eachChild((entity) => {
-                    if (entity.isInArea(_point)) {
-                        console.log(entity);
-                    }
-                });
+                let testEntity = layer.root.getFirstChild((c) => {
+                    return c.getProps("floorid") === "1987577"
+                })
+                console.log(testEntity.isInArea(_point));
                 this.bindings["click"].forEach(item => {
                     let {
                         entity,handler

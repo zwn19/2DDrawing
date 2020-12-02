@@ -3,6 +3,7 @@ import Element from "./Element";
 import Color from "../utils/Color";
 import {getPointsCenter, pushToArray} from "../math/utils";
 import Ray from "../math/geometry/curve/Ray";
+import LineSegment from "../math/geometry/curve/LineSegment";
 
 class Entity extends Element{
     constructor(attrs,style) {
@@ -41,16 +42,37 @@ class Entity extends Element{
     isInArea({x,y}) {
         // 射线法判断是否在多边形内
         let lines = this.getBoundaries();
-        const _zero = { x: -10000 * Math.random(), y: -10000 * Math.random() };
-        const line = new Ray({x,y},_zero);
-        let crossPoints = [];
-        lines.forEach(l => {
-            let point = l.getCrossPoint(line);
-            if (point) {
-                pushToArray(crossPoints, point);
+        function checkCount() {
+            const _zero = { x: -10000 * Math.random(), y: -10000 * Math.random() };
+            const line = new LineSegment({x,y},_zero);
+            let crossPoints = [];
+            lines.forEach(l => {
+                let point = l.getCrossPoint(line);
+                if (point) {
+                    console.log(point);
+                    pushToArray(crossPoints, point);
+                }
+            });
+            return crossPoints.length % 2;
+        }
+        let TotalTimes = 5;
+        const result = {
+            in: 0,
+            out: 0
+        }
+        while (TotalTimes > 0) {
+            if(checkCount()) {
+                result.in++
+            }else {
+                result.out++
             }
-        });
-        return crossPoints.length % 2;
+            TotalTimes--;
+            if (result.in === (TotalTimes + 1) / 2 ) {
+                return true;
+            }
+        }
+
+        return false;
     }
     drawPath(context) {
         let points = this.geometry.getPoints();

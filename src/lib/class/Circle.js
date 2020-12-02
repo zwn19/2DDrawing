@@ -1,6 +1,6 @@
 /* eslint-disable */
 import Entity from "./Entity";
-import Circle2d from "../math/2d/Circle";
+import Circle2d from "../math/geometry/2d/Circle";
 class Circle extends Entity{
     constructor(attrs, style) {
         let defaultProps = {

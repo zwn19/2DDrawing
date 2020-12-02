@@ -70,5 +70,31 @@ class Group extends Element{
           }
         })
     }
+
+    getChildren(fn) {
+        let ret = []
+        this.children.forEach(c => {
+            if(fn(c)) {
+                ret.push(c)
+            }
+            if(c.isGroup()) {
+                let sub = c.getChildren(fn);
+                ret = ret.concat(sub);
+            }
+        })
+    }
+    getFirstChild(fn) {
+        for(let c of this.children) {
+            if(fn(c)) {
+                return c;
+            }
+            if(c.isGroup()) {
+                let sub = c.getFirstChild(fn);
+                if (sub) {
+                    return sub;
+                }
+            }
+        }
+    }
 }
 export default Group;

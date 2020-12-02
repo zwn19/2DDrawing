@@ -1,6 +1,6 @@
 /* eslint-disable */
-import CircleCurve from "../geometry/curve/Circle";
-import {getPointsCenter} from "../utils";
+import CircleCurve from "../curve/Circle";
+import {getPointsCenter} from "../../utils";
 
 class Circle {
     constructor(center, radius) {

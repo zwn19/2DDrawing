@@ -1,5 +1,5 @@
-import Point from "./geometry/point";
-import Vector from "./geometry/Vector";
+import Point from "./geometry/base/Point";
+import Vector from "./geometry/base/Vector";
 
 const TOLERANCE = 0.001;
 function roundRadian(r) {

@@ -1,7 +1,7 @@
 /* eslint-disable */
 import Point from "./Point";
-import Matrix from "../Matrix";
-import LineSegment from "./curve/LineSegment";
+import Matrix from "../../Matrix";
+import LineSegment from "../curve/LineSegment";
 
 class Vector{
     constructor(x,y) {
@@ -56,6 +56,12 @@ class Vector{
     getCrossAngle(vec) {
         let acos = this.innerProduct(vec) / (vec.length() * this.length());
         let sign = this.crossMultiply(vec) > 0 ? 1 : -1;
+        if (acos > 1 && acos < 1.0001) {
+            acos = 1;
+        }
+        if (acos < -1 && acos > -1.0001) {
+            acos = -1;
+        }
         return sign * Math.acos(acos);
     }
     getPolarAngle() {

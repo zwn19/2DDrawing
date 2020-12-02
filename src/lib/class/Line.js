@@ -1,6 +1,6 @@
 /* eslint-disable */
 import Entity from "./Entity";
-import Line2d from "../math/2d/Line";
+import Line2d from "../math/geometry/2d/Line";
 
 class Line extends Entity{
     constructor(attrs, style) {

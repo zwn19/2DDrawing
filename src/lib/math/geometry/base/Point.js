@@ -1,8 +1,8 @@
 /* eslint-disable */
-import Matrix from "../Matrix";
+import Matrix from "../../Matrix";
 import CircleRange from "./CircleRange";
 import Vector from "./Vector";
-import LineSegment from "./curve/LineSegment";
+import LineSegment from "../curve/LineSegment";
 class Point {
     constructor(x = 0, y = 0) {
         this.x = Math.round(x * 1000000000) / 1000000000;

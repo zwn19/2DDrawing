@@ -1,7 +1,7 @@
 /* eslint-disable */
-import EllipseCurve from "../geometry/curve/Ellipse";
+import EllipseCurve from "../curve/Ellipse";
 import Polygon from "./Polygon";
-import {getPointsCenter} from "../utils";
+import {getPointsCenter} from "../../utils";
 
 class Ellipse {
     constructor(center, radiusX, radiusY) {

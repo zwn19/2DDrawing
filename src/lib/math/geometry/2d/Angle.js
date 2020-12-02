@@ -1,10 +1,10 @@
 /* eslint-disable */
-import { arrayIntersection } from "../../utils"
-import Vector from "../geometry/Vector";
-import LineSegment from "../geometry/curve/LineSegment";
-import { range } from "../../utils/index"
-import { calculateCrossPoints } from "../geometry/curve/index"
-import Circle from "../geometry/curve/Circle";
+import { arrayIntersection } from "../../../utils"
+import Vector from "../base/Vector";
+import LineSegment from "../curve/LineSegment";
+import { range } from "../../../utils"
+import { calculateCrossPoints } from "../curve"
+import Circle from "../curve/Circle";
 class Angle {
     constructor(point,vector1,vector2) {
         this.vertex = point;

@@ -1,7 +1,7 @@
 /* eslint-disable */
 import Root from "./Root";
 import Matrix from "../math/Matrix";
-import CoordinateSystem from "../math/geometry/CoordinateSystem";
+import CoordinateSystem from "../math/geometry/base/CoordinateSystem";
 
 const AlignMatrixStrategies = {
     "left-top" () {

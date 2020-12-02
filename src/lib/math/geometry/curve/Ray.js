@@ -1,6 +1,6 @@
 /* eslint-disable */
-import Vector from "../Vector";
-import Point from "../Point";
+import Vector from "../base/Vector";
+import Point from "../base/Point";
 import Line from "./Line";
 import LineSegment from "./LineSegment";
 
@@ -69,6 +69,9 @@ class Ray {
         } else {
             this.line.isPerpendicular(line);
         }
+    }
+    applyMatrix(matrix) {
+
     }
 }
 export default Ray;

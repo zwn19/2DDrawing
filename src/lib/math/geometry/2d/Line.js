@@ -1,7 +1,7 @@
 /* eslint-disable */
 
-import LineSegment from "../geometry/curve/LineSegment";
-import {getPointsCenter} from "../utils";
+import LineSegment from "../curve/LineSegment";
+import {getPointsCenter} from "../../utils";
 
 class Line {
     constructor(start,end) {

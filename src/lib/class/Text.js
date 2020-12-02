@@ -1,6 +1,6 @@
 /* eslint-disable */
 import Group from "./Group";
-import Point from "../math/geometry/Point";
+import Point from "../math/geometry/base/Point";
 import Color from "../utils/Color";
 
 class Text extends Group{
@@ -16,7 +16,7 @@ class Text extends Group{
     }
     getPosition() {
         const m = this.getMatrix();
-        return m.applyToPoint(this.start);
+        return this.start.applyMatrix(m);
     }
     updateContent(content) {
         if (this.children.length) {

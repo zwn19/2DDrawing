@@ -1,7 +1,8 @@
 /* eslint-disable */
-import LineSegment from "../geometry/curve/LineSegment";
+import LineSegment from "../curve/LineSegment";
 import Polygon from "./Polygon";
-import {getPointsCenter} from "../utils";
+import {getPointsCenter} from "../../utils";
+import Point from "../base/Point";
 
 class Rectangle {
     constructor(start,{ width , height }) {
@@ -19,7 +20,7 @@ class Rectangle {
             new LineSegment(p3,p4),
             new LineSegment(p4,p1),
         ];
-        this.points = [p1,p2,p3,p4];
+        this.points = [p1,p2,p3,p4].map(({x,y}) => new Point(x,y));
         this._area = width * height;
     }
     getStart() {

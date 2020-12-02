@@ -1,5 +1,5 @@
 /* eslint-disable */
-import Matrix from "../Matrix"
+import Matrix from "../../Matrix"
 import Point from "./Point";
 class CoordinateSystem {
     constructor(matrix = Matrix.init(3)) {
