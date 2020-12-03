@@ -59,11 +59,35 @@ let rootDom = document.getElementsByTagName("svg")[0];
 let object = getSVGElement(rootDom.outerHTML);
 
 // object.setChildren([c1,c2,entity1])
-console.log(object)
+
 let scene = new Scene(document.getElementById("scene"),object);
 let em = new EventManager();
 scene.usePlugin(em);
-// scene.useCanvasMode();
-scene.useSVGMode();
+scene.useCanvasMode();
+// scene.useSVGMode();
 // scene.addComponent(rect);
 scene.draw();
+
+function showPoint2({x,y}) {
+    let circle = new Circle({
+        cx: x,
+        cy: y,
+        r: 10,
+        fill: "green"
+    });
+    scene.getLayer().root.addChild(circle)
+    scene.draw();
+}
+function showLine2({start,end}) {
+    let circle = new LineEntity({
+        x1: start.x,
+        y1: start.y,
+        x2: end.x,
+        y2: end.y,
+        stroke: "blue"
+    });
+    scene.getLayer().root.addChild(circle)
+    scene.draw();
+}
+window.showPoint2 = showPoint2;
+window.showLine2 = showLine2;

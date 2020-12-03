@@ -21,7 +21,10 @@ class Element {
             transformOrigin: "left top"
         };
         for (let p in attrs) {
-            if(p !== "style") {
+            if(STYLE_PROPS.indexOf(p) > -1) {
+                this.setStyle(p, attrs[p]);
+            }
+            else if(p !== "style") {
                 this.setProps(p, attrs[p]);
             }
         }

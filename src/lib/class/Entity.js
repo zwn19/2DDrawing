@@ -49,13 +49,13 @@ class Entity extends Element{
             lines.forEach(l => {
                 let point = l.getCrossPoint(line);
                 if (point) {
-                    console.log(point);
                     pushToArray(crossPoints, point);
                 }
             });
             return crossPoints.length % 2;
         }
-        let TotalTimes = 5;
+        let TotalTimes = 1;
+        let targetTime = (TotalTimes + 1) / 2;
         const result = {
             in: 0,
             out: 0
@@ -67,11 +67,10 @@ class Entity extends Element{
                 result.out++
             }
             TotalTimes--;
-            if (result.in === (TotalTimes + 1) / 2 ) {
+            if (result.in === targetTime) {
                 return true;
             }
         }
-
         return false;
     }
     drawPath(context) {

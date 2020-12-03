@@ -28,10 +28,6 @@ class EventManager{
                     fill: "red"
                 })
                 layer.root.addChild(circle);
-                let testEntity = layer.root.getFirstChild((c) => {
-                    return c.getProps("floorid") === "1987577"
-                })
-                console.log(testEntity.isInArea(_point));
                 this.bindings["click"].forEach(item => {
                     let {
                         entity,handler

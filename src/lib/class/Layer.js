@@ -200,8 +200,7 @@ class Layer {
                 this.dom.style.height = this.containerSize.height + "px";
                 let _ratio = canvasWidth / size.width;
                 let pixRatioMatrix = Matrix.scale(_ratio, _ratio);
-                this.root.updateMatrix(pixRatioMatrix.multiply(this.matrix));
-                this.root.toCanvas(context);
+                this.root.toCanvas(context, pixRatioMatrix.multiply(this.matrix));
                 break;
             }
         }

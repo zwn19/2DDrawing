@@ -52,6 +52,9 @@ class Scene {
         return layer;
     }
     getLayer(name) {
+        if(!name) {
+            return this.layers.default;
+        }
         if (this.layers[name]) {
             return this.layers[name];
         }

@@ -16,9 +16,12 @@ class Root extends Group{
             height: this.props.height
         }
     }
-    toCanvas(context) {
+    toCanvas(context,outsideMatrix) {
         context.save();
         let matrix = this.getCurrentMatrix();
+        if(outsideMatrix) {
+            matrix = outsideMatrix.multiply(matrix);
+        }
         context.transform.apply(context, matrix.toCSSMatrixArray());
         this.children.forEach(ele => {
             ele.toCanvas(context);

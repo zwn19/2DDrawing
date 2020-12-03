@@ -88,6 +88,27 @@ class Line{
         return true;
     }
     getLineCrossPoint(line) {
+        if (this.a === 0) {
+           let y = this.c / this.b;
+           if (line.a) {
+               let x = (line.c - line.b * y) / line.a;
+               return new Point(x,y)
+           } else {
+               return null;
+           }
+        }
+        if (this.b === 0) {
+            let x = this.c / this.a;
+            if (line.b) {
+                let y = (line.c - line.a * x) / line.b;
+                return new Point(x,y)
+            }else {
+                return null;
+            }
+        }
+        if(line.a * line.b === 0) {
+            return line.getLineCrossPoint(this);
+        }
         let [x,y] = Matrix.resolveFormulaGroup([[this.a,this.b,this.c],[line.a,line.b,line.c]]);
         return new Point(x,y);
     }
