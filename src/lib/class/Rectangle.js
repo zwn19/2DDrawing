@@ -2,6 +2,7 @@
 import Entity from "./Entity";
 import Rectangle2d from "../math/geometry/2d/Rectangle";
 import Polygon from "./Polygon";
+import Color from "../utils/Color";
 
 class Rectangle extends Entity{
     constructor(attrs, style) {

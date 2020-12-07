@@ -86,9 +86,9 @@ class Entity extends Element{
     }
     toCanvas(context) {
         let m = this.getCurrentMatrix();
+        context.save();
+        context.transform.apply(context, m.toCSSMatrixArray());
         let run = () => {
-            context.save();
-            context.transform.apply(context, m.toCSSMatrixArray());
             let fill = this.getStyle("fill");
             let opacity = this.getStyle("opacity");
             if (opacity) {

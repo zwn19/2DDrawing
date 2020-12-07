@@ -1,11 +1,20 @@
 /* eslint-disable */
 import Element from "./Element";
 import { getSVGElement } from "./Common";
+import Point from "../math/geometry/base/Point";
 class Group extends Element{
     constructor(attrs, style) {
         super(attrs, style);
         this.children = [];
         this.tagName = "g";
+    }
+    isInArea({x,y}) {
+        let p = new Point(x,y);
+        return !!this.children.find(c => {
+            if(c.isInArea(p)) {
+                return  true;
+            }
+        })
     }
     isGroup() {
         return true;

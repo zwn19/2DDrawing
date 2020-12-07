@@ -63,6 +63,14 @@ let object = getSVGElement(rootDom.outerHTML);
 let scene = new Scene(document.getElementById("scene"),object);
 let em = new EventManager();
 scene.usePlugin(em);
+let testCmp = scene.getLayer().root.getFirstChild((cmp) => {
+    return cmp.getProps("floorid") === "1987577"
+})
+
+let _draw = testCmp.draw;
+
+
+em.registerMovable(testCmp);
 scene.useCanvasMode();
 // scene.useSVGMode();
 // scene.addComponent(rect);
