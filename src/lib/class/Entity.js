@@ -2,8 +2,8 @@
 import Element from "./Element";
 import Color from "../utils/Color";
 import {getPointsCenter, pushToArray} from "../math/utils";
-import Ray from "../math/geometry/curve/Ray";
 import LineSegment from "../math/geometry/curve/LineSegment";
+import RectArea from "../math/geometry/base/RectArea";
 
 class Entity extends Element{
     constructor(attrs,style) {

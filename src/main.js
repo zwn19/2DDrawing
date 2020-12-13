@@ -15,7 +15,6 @@ import Circle from "./lib/class/Circle";
 import Curve, {calculateCrossPoints} from "./lib/math/geometry/curve/index";
 import Line from "./lib/math/geometry/curve/Line";
 import LineEntity from "./lib/class/Line"
-import Rectangle from "./lib/math/geometry/2d/Rectangle";
 import Polygon from "./lib/class/Polygon";
 import Scene from "./lib/class/Scene";
 import {isPositivePolarAngle, sortPoints, toDegree} from "./lib/math/utils";
@@ -23,6 +22,7 @@ import EllipseCurve from "./lib/math/geometry/curve/Ellipse";
 import Range2D from "./lib/math/geometry/base/Range2D";
 import EllipseEntity from "./lib/class/Ellipse";
 import EventManager from "./lib/class/plugins/EventManager";
+import Rectangle from "./lib/class/Rectangle";
 
 function showPoint({x,y},matrix) {
     let canvas = document.getElementsByTagName("canvas")[0];
@@ -64,15 +64,25 @@ let scene = new Scene(document.getElementById("scene"),object);
 let em = new EventManager();
 scene.usePlugin(em);
 let testCmp = scene.getLayer().root.getFirstChild((cmp) => {
-    return cmp.getProps("floorid") === "1987577"
+    return cmp.getProps("id") === "AAA"
 })
 
 let _draw = testCmp.draw;
+let points = testCmp.getPoints();
+points.forEach(p => {
+    let circle = new Circle({
+        cx: p.x,
+        cy: p.y,
+        r: 4
+    },{
+        fill: "green"
+    })
+    scene.addComponent(circle);
+});
 
-
-em.registerMovable(testCmp);
+em.wholeMovable();
 scene.useCanvasMode();
-// scene.useSVGMode();
+scene.useSVGMode();
 // scene.addComponent(rect);
 scene.draw();
 

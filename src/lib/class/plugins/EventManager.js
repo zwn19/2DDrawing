@@ -33,6 +33,28 @@ class EventManager{
             this._startMatrix = null
         })
     }
+    wholeMovable() {
+        this.bindEvent("panstart", null,(point) => {
+            this._start = point;
+        })
+        this.bindEvent("panmove", null,(point) => {
+            if (this._start) {
+                let delta = {
+                    x: point.x - this._start.x,
+                    y: point.y - this._start.y
+                }
+                let m = Matrix.translate(delta.x,delta.y);
+                this.scene.eachLayer((layer) => {
+                    layer.applyInnerMatrix(m);
+                })
+                this.scene.draw();
+                this._start = point
+            }
+        })
+        this.bindEvent("panend", null,() => {
+            this._start = null
+        })
+    }
     init(scene){
         this.scene = scene;
         let container = scene.container;

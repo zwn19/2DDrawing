@@ -2,6 +2,7 @@
 import Element from "./Element";
 import { getSVGElement } from "./Common";
 import Point from "../math/geometry/base/Point";
+import UniqueArray from "../utils/UniqueArray";
 class Group extends Element{
     constructor(attrs, style) {
         super(attrs, style);
@@ -18,6 +19,16 @@ class Group extends Element{
     }
     isGroup() {
         return true;
+    }
+    getPoints() {
+        let points = new UniqueArray();
+        this.children.forEach(c => {
+            points = points.concat(c.getPoints());
+        });
+        return points;
+    }
+    getBoundaries() {
+
     }
     removeChild(c) {
         const i = this.children.indexOf(c);

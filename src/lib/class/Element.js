@@ -1,6 +1,7 @@
 /* eslint-disable */
 import Matrix from "../../lib/math/Matrix";
 import { STYLE_PROPS } from "../utils/Constant";
+import RectArea from "../math/geometry/base/RectArea";
 
 class Element {
     removeNoneAttr(obj) {
@@ -41,6 +42,29 @@ class Element {
     }
     getBoundaries() {
 
+    }
+    getContainingRect() {
+        let points = this.getPoints();
+        let ret = {
+            max: {
+                x: Number.MIN_SAFE_INTEGER,
+                y: Number.MIN_SAFE_INTEGER
+            },
+            min: {
+                x: Number.MAX_SAFE_INTEGER,
+                y: Number.MAX_SAFE_INTEGER
+            }
+        }
+        points.forEach(({x,y}) => {
+            ret.max.x = Math.max(x, ret.max.x);
+            ret.max.y = Math.max(y, ret.max.y);
+            ret.min.x = Math.min(x, ret.min.x);
+            ret.min.y = Math.min(y, ret.min.y);
+        });
+        return new RectArea(ret.min, {
+            width: ret.max.x - ret.min.x,
+            height: ret.max.y - ret.min.y
+        });
     }
     isText() {
         return false;

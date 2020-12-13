@@ -3,10 +3,10 @@ class UniqueArray extends Array{
 
     constructor(items,comparator) {
         super();
+        this.comparator = comparator || isEqual;
         if (items) {
             this.push(...items);
         }
-        this.comparator = comparator || isEqual;
     }
 
     push(...items) {

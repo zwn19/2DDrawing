@@ -5,14 +5,17 @@ import {roundRadian, toDegree, uniqueArray} from "../../utils"
 import Range from "../base/Range"
 import PolarCoordinateSystem from "../base/PolarCoordinateSystem";
 import Vector from "../base/Vector";
+import {transToProperRadian} from "../../../utils";
+import AngleRange from "../base/AngleRange";
 let Tolerance = new Range(1 - 0.001,1 + 0.001);
 class Circle {
     constructor(center,radius,startAngle = 0,deltaAngle = Math.PI * 2) {
+        this.deltaAngle = deltaAngle;
         this.center = new Point(center.x,center.y);
         this.radius = parseFloat(radius);
-        startAngle = roundRadian(startAngle);
-        let endAngle = startAngle + deltaAngle;
-        this.angleRange = new Range(startAngle, endAngle);
+        startAngle = transToProperRadian(startAngle);
+        let endAngle = transToProperRadian(startAngle + deltaAngle);
+        this.angleRange = new AngleRange(startAngle, deltaAngle);
         this.polarSystem = new PolarCoordinateSystem(this.center);
         this.start = startAngle;
         this.end = endAngle;
@@ -24,8 +27,7 @@ class Circle {
         return this.getPointByAngle(this.end);
     }
     getAbsAngle() {
-        let { min, max } = this.angleRange;
-        return Math.abs(max - min);
+        return Math.abs(this.deltaAngle);
     }
     getStartAngle() {
         return this.start;
@@ -44,9 +46,8 @@ class Circle {
     }
     generatePoints(count) {
         count = count || (toDegree(this.getAbsAngle()) / 2);
-        let { min: startAngle, max: endAngle } = this.angleRange;
-        let unit = (endAngle - startAngle) / count;
-        let cur = startAngle;
+        let unit = this.deltaAngle / count;
+        let cur = this.getStartAngle();
         let points = [];
         for(let i = 0;i <= count ;i++) {
             cur += unit;
@@ -98,7 +99,8 @@ class Circle {
     getPointByAngle(angle) {
         if (this.isAngleInRange(angle)) {
             let radius = this.radius;
-            return new Point(radius * Math.cos(angle),radius * Math.sin(angle));
+            let {x,y} = this.center;
+            return new Point(radius * Math.cos(angle) + x,radius * Math.sin(angle) + y);
         }
     }
     length() {
@@ -136,6 +138,7 @@ class Circle {
     isReverse(p1,p2,isLargeArc) {
         let ang1 = this.getPointAngle(p1);
         let ang2 = this.getPointAngle(p2);
+
         if (ang2 < ang1) {
             ang2 = ang2 + Math.PI * 2;
         }
@@ -155,7 +158,7 @@ class Circle {
         let deltaAngle = _line.getCrossAngle(line)
         let _startAngle = this.start + deltaAngle;
         let radius = start.distanceTo(center);
-        return new Circle(center,radius, _startAngle , _startAngle + (this.end - this.start))
+        return new Circle(center,radius, _startAngle , this.deltaAngle)
     }
 }
 export default Circle;

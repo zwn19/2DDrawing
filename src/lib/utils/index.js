@@ -104,11 +104,24 @@ function range(start,end) {
     }
 }
 
+function transToProperRadian(radian) {
+    if (radian < 0) {
+        radian = radian + Math.PI * 2;
+        return transToProperRadian(radian);
+    }
+    if (radian > Math.PI * 2){
+        radian = radian - Math.PI * 2;
+        return transToProperRadian(radian);
+    }
+    return radian;
+}
+
 export {
     combination,
     permutation,
     arrayUnion,
     arrayIntersection,
     isEqual,
-    range
+    range,
+    transToProperRadian
 }

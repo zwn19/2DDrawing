@@ -60,6 +60,11 @@ class Scene {
         }
         throw new Error(`不存在"${name}"图层`);
     }
+    eachLayer(fn) {
+        for(let name in  this.layers) {
+            fn(this.layers[name]);
+        }
+    }
     useSVGMode() {
         this.mode = "svg";
         for(let name in  this.layers) {

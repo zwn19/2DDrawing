@@ -77,12 +77,12 @@ class Path {
         let _commands = [];
         commands.forEach(cmd => {
             if (cmd.name === "arc") {
-                let [cx, cy, radius, startAngle, endAngle] = cmd.args;
+                let [cx, cy, radius, startAngle, endAngle,counterclockwise] = cmd.args;
                 let circle = new Circle({x:cx,y:cy},radius,startAngle,endAngle - startAngle);
                 circle = circle.applyMatrix(matrix)
                 _commands.push({
                     name: cmd.name,
-                    args: [circle.center.x,circle.center.y,circle.radius,circle.start,circle.end]
+                    args: [circle.center.x,circle.center.y,circle.radius,circle.start,circle.start + circle.deltaAngle,counterclockwise]
                 });
                 return;
             }

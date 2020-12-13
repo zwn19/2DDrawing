@@ -114,7 +114,7 @@ class Layer {
         this.mode = mode;
         this.containerSize = {};
         this.setContainerSize(containerSize);
-        this.updateMatrix();
+        this.resetMatrix();
         this.coord = new CoordinateSystem(this.matrix);
         switch (this.mode) {
             case "svg": {
@@ -133,8 +133,12 @@ class Layer {
         this.containerSize.height = height;
     }
 
-    updateMatrix() {
+    resetMatrix() {
         this.matrix = AlignMatrixStrategies[this.align](this.containerSize, this.root.getSize());
+    }
+
+    applyInnerMatrix(matrix) {
+        this.matrix = matrix.multiply(this.matrix);
     }
 
     useSVGMode() {
@@ -169,7 +173,7 @@ class Layer {
         this.root.addChild(cmp);
     }
 
-    draw(container, parentMatrix) {
+    draw(container) {
         this.dom.style.position = "absolute";
         this.dom.style.left = "0";
         this.dom.style.top = "0";
