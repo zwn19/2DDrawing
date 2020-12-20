@@ -25,7 +25,7 @@ module.exports = {
             options: {
                 limit: 10000
             }
-        },{
+        },/*{
             test: /\.scss$/,
             exclude: /node_modules/,
             use: ExtractTextWebpackPlugin.extract({
@@ -44,7 +44,7 @@ module.exports = {
                     loader: "sass-loader"
                 }]
             })
-        }]
+        }*/]
     },
     devServer: {
         open: "chrome",
