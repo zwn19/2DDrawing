@@ -1,4 +1,4 @@
-import "./styles/main.scss";
+// import "./styles/main.scss";
 import Matrix from "./lib/math/Matrix";
 import Vector from "./lib/math/geometry/base/Vector";
 import Point from "./lib/math/geometry/base/Point";
