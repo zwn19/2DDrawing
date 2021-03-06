@@ -1,8 +1,8 @@
+/* eslint-disable */
 import Hammer from "hammerjs";
 import Point from "../../math/geometry/base/Point";
 import Circle from "../Circle";
 import Matrix from "../../math/Matrix";
-import CoordinateSystem from "../../math/geometry/base/CoordinateSystem";
 import Group from "../Group";
 
 class EventManager{
@@ -57,6 +57,17 @@ class EventManager{
             });
         });
     }
+
+    selectable(cmp) {
+        if (Array.isArray(cmp)) {
+            cmp.forEach(c => {
+                this.selectable(c);
+            });
+        } else {
+
+        }
+    }
+
     registerMovable(cmp) {
         this.bindEvent("panstart", cmp,(point) => {
             this._start = point;
@@ -140,7 +151,25 @@ class EventManager{
             runHandler(e,"panstart");
         })
         hammer.on("panmove", (e) => {
-            runHandler(e,"panmove");
+            let {x,y} = container.getBoundingClientRect();
+            let {
+                x: _x,y: _y
+            } = e.center
+            let relative = new Point(_x - x,_y - y);
+            me.bindings['panmove'].forEach(item => {
+                let {
+                    entity,handler
+                } = item
+                if (entity) {
+                    let layer = scene.findLayer((l) => {
+                        return l.contains(entity)
+                    })
+                    let point = layer.coord.getPointFromOriginSystem(relative);
+                    handler.call(entity,point);
+                }else {
+                    handler(relative);
+                }
+            })
         });
         hammer.on("panend", (e) => {
             runHandler(e,"panend");

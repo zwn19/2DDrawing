@@ -1,8 +1,8 @@
-import EventManager from "./lib/class/plugins/EventManager";
 import {getSVGElement} from "./lib/class/Common";
+import Scene from "./lib/class/Scene";
+import EventManager from "./lib/class/plugins/EventManager";
 import Circle from "./lib/class/Circle";
 import CoordinateSystem from "./lib/math/geometry/base/CoordinateSystem";
-import Scene from "./lib/class/Scene";
 import Line from "./lib/class/Line";
 import Text from "./lib/class/Text";
 import Matrix from "./lib/math/Matrix";
@@ -20,7 +20,7 @@ sampleDots = sampleDots.split(';').filter(p =>p).map((p) => {
         y: arr[1] * 1
     }
 });
-// console.log(sampleDots);
+const ETA = 0.001;
 function mean(nums) {
     let sum = 0;
     nums.forEach(num => {
@@ -37,7 +37,7 @@ function sigma(nums) {
     sum = sum / nums.length;
     return Math.sqrt(sum);
 }
-let xArr = sampleDots.map(p => p.x);
+
 let getStandardize = function (arr) {
     let miu = mean(arr);
     let _sigma = sigma(arr)
@@ -45,14 +45,6 @@ let getStandardize = function (arr) {
         return (x - miu) / _sigma;
     }
 };
-let standardize = getStandardize(xArr);
-let _sampleDots = sampleDots.map(p => {
-    let {x,y} = p;
-    return {
-        x: standardize(x),
-        y
-    }
-});
 
 class CoordinateSystemDisplay {
     // options: {xUnit,yUnit,xMin,yMin,xGraduation,yGraduation,offsetY,offsetX}
@@ -62,6 +54,7 @@ class CoordinateSystemDisplay {
         let {origin = {x:width/2,y:height/2},xUnit = 1,yUnit = 1,xGraduation,yGraduation,offsetY,offsetX} = options;
         let root = getSVGElement(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}"></svg>`);
         let scene = new Scene(container,root);
+        scene.useCanvasMode();
         let em = new EventManager();
         scene.usePlugin(em);
         this.scene = scene;
@@ -220,27 +213,48 @@ class CoordinateSystemDisplay {
         this.refresh();
     }
 }
-
-let sysDisplay = new CoordinateSystemDisplay(cont, {
-    xGraduation: .5,
-    yGraduation: .5,
-    xUnit: 120,
-    yUnit: 130,
-    xMin: -2,
-    yMin: -3
-});
-/*(function () {
+let REGISTERS = {
+    SteepestDescent,
+    PolynomialRegression,
+    Perceptron,
+    LogicRegress
+}
+for (let id in REGISTERS){
+    let dom = document.getElementById(id);
+    if (dom) {
+        dom.addEventListener('click',() => {
+            cont.innerHTML = '';
+            REGISTERS[id]();
+        });
+    }
+}
+// 最速下降法
+function SteepestDescent (){
+    let theta0 = 10;
+    let theta1 = 10;
+    let diff = 1;
+    let sysDisplay = new CoordinateSystemDisplay(cont, {
+        xGraduation: 50,
+        yGraduation: 50,
+        origin: {
+            x: 30,
+            y: cont.offsetHeight - 20
+        }
+    });
+    let xArr = sampleDots.map(p => p.x);
+    let standardize = getStandardize(xArr);
+    let _sampleDots = sampleDots.map(p => {
+        let {x,y} = p;
+        let _x = standardize(x);
+        return {
+            x: _x,
+            y,
+        }
+    });
     sampleDots.forEach(p => {
         sysDisplay.drawDot(p,'red');
     });
     sysDisplay.refresh();
-})()*/
-
-const ETA = 0.001;
-/*(function (){
-    let theta0 = 10;
-    let theta1 = 10;
-    let diff = 1;
     let currentError = E();
     function f(x) {
         return theta0 + theta1 * x;
@@ -274,19 +288,38 @@ const ETA = 0.001;
     }
     let start = {x:0};
     let end = {x:300};
-    start.y = f(standardize(start.x))
+    start.y = f(standardize(start.x));
     end.y = f(standardize(end.x));
-    console.log(theta0,theta1,diff);
-    console.log(start,end);
     sysDisplay.drawLine(start,end,'green');
     sysDisplay.refresh();
-})();*/
-
+};
 // 多项式回归
-/*(function () {
+function PolynomialRegression() {
     let theta = new Matrix([[10,10,10]]);
-    let currentError = E();
     let diff = 1;
+    let sysDisplay = new CoordinateSystemDisplay(cont, {
+        xGraduation: 50,
+        yGraduation: 50,
+        origin: {
+            x: 30,
+            y: cont.offsetHeight - 20
+        }
+    });
+    sampleDots.forEach(p => {
+        sysDisplay.drawDot(p,'red');
+    });
+    sysDisplay.refresh();
+    let xArr = sampleDots.map(p => p.x);
+    let standardize = getStandardize(xArr);
+    let _sampleDots = sampleDots.map(p => {
+        let {x,y} = p;
+        let _x = standardize(x);
+        return {
+            x: _x,
+            y,
+        }
+    });
+    let currentError = E();
     function f(x) {
         let m = new Matrix([[1,x,x*x]]).transpose();
         let result = theta.multiply(m);
@@ -327,11 +360,19 @@ const ETA = 0.001;
     sysDisplay.drawFunction(function(x) {
         return f(standardize(x));
     },10);
-})()*/
+};
 // 感知机 perceptron
 const perceptronData = '210,200,-1;153,432,-1;220,262,-1;118,214,-1;474,384,1;485,411,1;233,430,-1;396,361,1;' +
     '484,349,1;429,259,1;286,220,1;399,433,-1;403,340,1;252,34,1;497,472,1;379,416,-1;76,163,-1;263,112,1;26,193,-1;61,473,-1;420,253,1;';
-/*(function () {
+function Perceptron() {
+    let sysDisplay = new CoordinateSystemDisplay(cont, {
+        xGraduation: .5,
+        yGraduation: .5,
+        xUnit: 120,
+        yUnit: 130,
+        xMin: -2,
+        yMin: -3
+    });
     let dots = perceptronData.split(';').filter(p => p).map(pair => {
         let arr = pair.split(',');
         return {
@@ -340,7 +381,17 @@ const perceptronData = '210,200,-1;153,432,-1;220,262,-1;118,214,-1;474,384,1;48
             y: arr[2] * 1
         };
     });
-    dots.forEach(pair => {
+    let array1 = dots.map(d => d.x1);
+    let array2 = dots.map(d => d.x2);
+    let standardize1 = getStandardize(array1);
+    let standardize2 = getStandardize(array2);
+    let _dots = dots.map(d => {
+        let _d = {...d};
+        _d.x1 = standardize1(_d.x1);
+        _d.x2 = standardize2(_d.x2);
+        return _d;
+    });
+    _dots.forEach(pair => {
         if(pair.y === 1) {
             sysDisplay.drawDot({
                 x: pair.x1,
@@ -372,7 +423,7 @@ const perceptronData = '210,200,-1;153,432,-1;220,262,-1;118,214,-1;474,384,1;48
             }
         });
     }
-    for(let i=0;i<10;i++) {
+    for(let i=0;i<5000;i++) {
         cal();
     }
     console.log(W.data);
@@ -381,11 +432,19 @@ const perceptronData = '210,200,-1;153,432,-1;220,262,-1;118,214,-1;474,384,1;48
         let [x1,x2] = W.data;
         return -x1 / x2 * x;
     }
-    sysDisplay.drawLine({x:0,y:0},{x:500,y:_line(500)},'#9945ff');
+    sysDisplay.drawLine({x:-2,y:-2},{x:2,y:_line(2)},'#9945ff');
     sysDisplay.refresh();
-})()*/
+};
 // 逻辑回归
-(function (){
+function LogicRegress(){
+    let sysDisplay = new CoordinateSystemDisplay(cont, {
+        xGraduation: .5,
+        yGraduation: .5,
+        xUnit: 120,
+        yUnit: 130,
+        xMin: -2,
+        yMin: -3
+    });
     let dots = perceptronData.split(';').filter(p => p).map(pair => {
         let arr = pair.split(',');
         return {
@@ -454,10 +513,6 @@ const perceptronData = '210,200,-1;153,432,-1;220,262,-1;118,214,-1;474,384,1;48
     end.y = f(end.x);
     console.log(start,end);
     sysDisplay.drawLine(start,end,'green');
-    sysDisplay.drawDot({
-        x: standardize1(210),
-        y: standardize2(200)
-    },'blue');
     console.log(sigmoid(new Matrix([[1,standardize1(210),standardize2(200)]])));
     sysDisplay.refresh();
-})()
+};

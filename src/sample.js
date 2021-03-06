@@ -94,9 +94,8 @@ testCmp.getBoundaries().forEach(line => {
 });
 
 
-em.wholeMovable();
-em.addTooltip(testCmp, 'x,y');
-// em.registerMovable(testCmp)
+// em.wholeMovable();
+em.registerMovable(testCmp)
 scene.useCanvasMode();
 scene.useSVGMode();
 scene.draw();
@@ -124,3 +123,14 @@ function showLine2({start,end}) {
 }
 window.showPoint2 = showPoint2;
 window.showLine2 = showLine2;
+
+let svgBtn = document.getElementById('svg-btn');
+let canBtn = document.getElementById('canvas-btn');
+svgBtn.addEventListener('click', () => {
+    scene.useSVGMode();
+    scene.draw();
+});
+canBtn.addEventListener('click', () => {
+    scene.useCanvasMode();
+    scene.draw();
+});
