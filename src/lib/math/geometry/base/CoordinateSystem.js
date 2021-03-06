@@ -8,6 +8,9 @@ class CoordinateSystem {
     applyMatrix(matrix) {
         this.matrix = this.matrix.multiply(matrix);
     }
+    updateMatrix(matrix) {
+        this.matrix = matrix;
+    }
     getPointFromOriginSystem(point) {
         let p = Point.applyMatrixToPoint(point, this.matrix.getInverse());
         return p;
@@ -24,7 +27,7 @@ class CoordinateSystem {
         let origin = this.getPointInOriginSystem(point);
         return system.getPointFromOriginSystem(origin);
     }
-    rotateXYAxis(xAngle = 0,yAngle = 0) {
+    _rotateMatrix(xAngle,yAngle) {
         xAngle = xAngle / 180 * Math.PI;
         yAngle = yAngle / 180 * Math.PI;
         let arr = [
@@ -33,11 +36,23 @@ class CoordinateSystem {
             [0,0,1]
         ];
         let matrix = new Matrix(arr);
+        return matrix;
+    }
+    rotateXYAxis(xAngle = 0,yAngle = 0) {
+        let matrix = this._rotateMatrix(xAngle,yAngle);
         this.matrix = matrix.multiply(this.matrix);
+    }
+    rotateRelativeXYAxis(xAngle = 0,yAngle = 0) {
+        let matrix = this._rotateMatrix(xAngle,yAngle);
+        this.matrix = this.matrix.multiply(matrix);
     }
     translateXYAxis(translateX = 0,translateY = 0) {
         let matrix = Matrix.translate(translateX,translateY);
         this.matrix = matrix.multiply(this.matrix);
+    }
+    translateRelativeXYAxis(translateX = 0,translateY = 0) {
+        let matrix = Matrix.translate(translateX,translateY);
+        this.matrix = this.matrix.multiply(matrix);
     }
     scaleXYUnit(scaleX = 1,scaleY = 1) {
         let m = Matrix.scale(scaleX,scaleY,{x:0,y:0});

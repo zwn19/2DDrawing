@@ -3,11 +3,23 @@ import Element from "./Element";
 import { getSVGElement } from "./Common";
 import Point from "../math/geometry/base/Point";
 import UniqueArray from "../utils/UniqueArray";
+import {getPointsCenter} from "../math/utils";
 class Group extends Element{
     constructor(attrs, style) {
         super(attrs, style);
         this.children = [];
         this.tagName = "g";
+    }
+    contains(ele) {
+        if (this.children.indexOf(ele) > -1){
+            return true;
+        }
+        for(let sub of this.children){
+            if (sub.contains && sub.contains(ele)) {
+                return true;
+            }
+        }
+        return false;
     }
     isInArea({x,y}) {
         let p = new Point(x,y);
@@ -27,8 +39,16 @@ class Group extends Element{
         });
         return points;
     }
+    getCenter() {
+        let points = this.getPoints();
+        return getPointsCenter(points);
+    }
     getBoundaries() {
-
+        let lines = new UniqueArray();
+        this.children.forEach(c => {
+            lines = lines.concat(c.getLines());
+        });
+        return lines;
     }
     removeChild(c) {
         const i = this.children.indexOf(c);

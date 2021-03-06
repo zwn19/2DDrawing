@@ -135,10 +135,17 @@ class Layer {
 
     resetMatrix() {
         this.matrix = AlignMatrixStrategies[this.align](this.containerSize, this.root.getSize());
+        this.coord && this.coord.updateMatrix(this.matrix);
     }
 
-    applyInnerMatrix(matrix) {
-        this.matrix = matrix.multiply(this.matrix);
+    applyMatrix(matrix) {
+        this.matrix = this.matrix.multiply(matrix);
+        this.coord.updateMatrix(this.matrix);
+    }
+
+    updateMatrix(matrix) {
+        this.matrix = matrix;
+        this.coord.updateMatrix(matrix);
     }
 
     useSVGMode() {
@@ -171,6 +178,13 @@ class Layer {
 
     addComponent(cmp) {
         this.root.addChild(cmp);
+    }
+
+    contains(cmp) {
+        if (this.root === cmp) {
+            return true;
+        }
+        return this.root.contains(cmp);
     }
 
     draw(container) {

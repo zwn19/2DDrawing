@@ -8,6 +8,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 module.exports = {
     entry: {
         main: "./src/main.js",
+        sample: "./src/sample.js",
     },
     output: {
         path: path.resolve(__dirname,'dist'),
@@ -57,7 +58,12 @@ module.exports = {
         new HtmlWebpackPlugin({
             filename: 'index.html',
             template: 'src/index.html',
-            chunk: "main"
+            chunks: ["main"]
+        }),
+        new HtmlWebpackPlugin({
+            filename: 'sample.html',
+            template: 'src/sample.html',
+            chunks: ["sample"]
         }),
         new webpack.HotModuleReplacementPlugin(),
         new ExtractTextWebpackPlugin({

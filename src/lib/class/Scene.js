@@ -60,6 +60,13 @@ class Scene {
         }
         throw new Error(`不存在"${name}"图层`);
     }
+    findLayer(fn) {
+        for(let name in  this.layers) {
+            if(fn(this.layers[name])){
+                return this.layers[name];
+            }
+        }
+    }
     eachLayer(fn) {
         for(let name in  this.layers) {
             fn(this.layers[name]);

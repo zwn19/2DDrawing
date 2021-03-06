@@ -3,7 +3,6 @@ import Element from "./Element";
 import Color from "../utils/Color";
 import {getPointsCenter, pushToArray} from "../math/utils";
 import LineSegment from "../math/geometry/curve/LineSegment";
-import RectArea from "../math/geometry/base/RectArea";
 
 class Entity extends Element{
     constructor(attrs,style) {
@@ -54,7 +53,7 @@ class Entity extends Element{
             });
             return crossPoints.length % 2;
         }
-        let TotalTimes = 1;
+        let TotalTimes = 5;
         let targetTime = (TotalTimes + 1) / 2;
         const result = {
             in: 0,

@@ -328,7 +328,12 @@ class Path extends Entity{
                                 circleCurve = subCircles.find(c => c.isReverse(ctrl,current,largeArcFlag));
                             }
                             let startAngle = circleCurve.getPointAngle(ctrl);
-                            let endAngle = startAngle + circleCurve.deltaAngle;
+                            let endAngle;
+                            if (sweepFlag) {
+                                endAngle = startAngle + circleCurve.deltaAngle;
+                            } else {
+                                endAngle = startAngle - circleCurve.deltaAngle;
+                            }
                             let center = circleCurve.getCenter();
                             //svg canvas 画圆弧顺逆时针方向相反
                             pathCommands.push({
@@ -411,7 +416,12 @@ class Path extends Entity{
                                 circleCurve = subCircles.find(c => c.isReverse(ctrl,current,largeArcFlag));
                             }
                             let startAngle = circleCurve.getPointAngle(ctrl);
-                            let endAngle = startAngle + circleCurve.deltaAngle;
+                            let endAngle;
+                            if (sweepFlag) {
+                                endAngle = startAngle + circleCurve.deltaAngle;
+                            } else {
+                                endAngle = startAngle - circleCurve.deltaAngle;
+                            }
                             let center = circleCurve.getCenter();
                             //svg canvas 画圆弧顺逆时针方向相反
                             pathCommands.push({

@@ -2,7 +2,6 @@
 import Group from "./Group";
 import Point from "../math/geometry/base/Point";
 import Color from "../utils/Color";
-
 class Text extends Group{
     constructor(attrs, style, content) {
         super(attrs, style);
