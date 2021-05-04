@@ -46,7 +46,7 @@ class Group extends Element{
     getBoundaries() {
         let lines = new UniqueArray();
         this.children.forEach(c => {
-            lines = lines.concat(c.getLines());
+            lines = lines.concat(c.getBoundaries());
         });
         return lines;
     }

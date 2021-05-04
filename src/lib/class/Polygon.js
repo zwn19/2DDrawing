@@ -14,8 +14,10 @@ class Polygon extends Entity{
         let points = [];
         if (this.props.points) {
             this.props.points.split(" ").forEach(pair => {
-                let [x,y] = pair.split(",");
-                points.push({x,y});
+                if(pair.trim()){
+                    let [x,y] = pair.split(",");
+                    points.push({x,y});
+                }
             });
             this.geometry = new Polygon2d(points);
         }

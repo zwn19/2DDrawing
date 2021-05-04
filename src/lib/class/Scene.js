@@ -4,6 +4,7 @@ import Matrix from "../math/Matrix";
 
 class Scene {
     constructor(container,defaultRoot) {
+        this.plugins = [];
         let width = container.scrollWidth;
         let height = container.scrollHeight;
         this.size = {
@@ -28,7 +29,12 @@ class Scene {
         return this.size.width / this.size.height;
     }
 
+    getPlugin(name) {
+        return this.plugins.find(p => p.name === name);
+    }
+
     usePlugin(plugin) {
+        this.plugins.push(plugin);
         plugin.init(this);
     }
 

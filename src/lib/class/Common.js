@@ -129,6 +129,8 @@ function resolveSVG(svgText) {
                 };
                 if (tagStack[tagStack.length - 1]) {
                     tagStack[tagStack.length - 1].children.push(obj);
+                } else if(ret[3]) {
+                    all.push(obj);
                 }
                 if (!ret[3]) {
                     tagStack.push(obj);
@@ -138,7 +140,7 @@ function resolveSVG(svgText) {
                     tag: "",
                     text: ret[4],
                 });
-            } else if (ret[5] || ret[3]) {
+            } else if (ret[5]) {
                 obj = tagStack.pop();
                 obj.end = ret.index;
                 if (tagStack.length === 0) {
@@ -147,9 +149,6 @@ function resolveSVG(svgText) {
             }
             ret = startReg.exec(template);
         }
-        all.forEach((ele) => {
-            // ele.inner = template.substring(ele.start, ele.end);
-        });
         return all;
     }
     function resolveAttrs(attrString) {
@@ -291,3 +290,4 @@ export {
     resolveSVG,
     getSVGElement
 }
+

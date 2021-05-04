@@ -7,6 +7,7 @@ import Group from "../Group";
 
 class EventManager{
     constructor() {
+        this.name = 'event-manager';
         this.bindings = {
             "click": [],
             "panstart": [],
@@ -33,7 +34,7 @@ class EventManager{
             container.appendChild(this._tooltip);
         }
         this.bindEvent("mouseIn", cmp,() => {
-            console.log('mouseIn');
+            // console.log('mouseIn');
             let p = cmp.getCenter();
             let layer = this.scene.findLayer((l) => {
                 return l.contains(cmp)

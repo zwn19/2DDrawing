@@ -180,6 +180,14 @@ class Layer {
         this.root.addChild(cmp);
     }
 
+    removeComponent(cmp) {
+        this.root.removeChild(cmp);
+    }
+
+    clearComponents() {
+        this.root.setChildren([]);
+    }
+
     contains(cmp) {
         if (this.root === cmp) {
             return true;

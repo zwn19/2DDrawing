@@ -516,3 +516,237 @@ function LogicRegress(){
     console.log(sigmoid(new Matrix([[1,standardize1(210),standardize2(200)]])));
     sysDisplay.refresh();
 };
+
+let sampleBtn = document.getElementById('sample-btn');
+sampleBtn.addEventListener('click', () => {
+    window.location.href = 'sample.html';
+});
+
+
+function commonPart(str1, str2,equals) {
+    const match = [];
+    const array = [];
+    for (let i = 0; i < str1.length; i++) {
+        const row = [];
+        const matchRow = [];
+        match.push(matchRow);
+        array.push(row);
+        for (let j = 0; j < str2.length; j++) {
+            if (!equals(str1[i],str2[j])) {
+                row[j] = Math.max(getArrayValue(i - 1, j), getArrayValue(i, j - 1));
+                if (getArrayValue(i - 1, j) > getArrayValue(i, j - 1)) {
+                    matchRow[j] = getMatchRow(i - 1, j);
+                } else {
+                    matchRow[j] = getMatchRow(i, j - 1);
+                }
+            } else {
+                row[j] = getArrayValue(i - 1, j - 1) + 1;
+                if (getArrayValue(i - 1, j - 1)) {
+                    matchRow[j] = [].concat(getMatchRow(i - 1, j - 1)).concat([{
+                        i, j
+                    }]);
+                } else {
+                    matchRow.push([{
+                        i, j
+                    }]);
+                }
+            }
+        }
+    }
+    return {
+        length: array[array.length - 1].pop(),
+        match: match[match.length - 1].pop(),
+    };
+    function getArrayValue(row, column) {
+        if (array[row]) {
+            return array[row][column] || 0;
+        }
+        return 0;
+    }
+
+    function getMatchRow(row, column) {
+        if (match[row]) {
+            return match[row][column] || [];
+        }
+        return [];
+    }
+}
+function compare(str1,str2,equals) {
+    if(!equals) {
+        equals = (o1,o2) => {
+            return o1 === o2;
+        }
+    }
+    const parts = {
+        added: [],
+        modified: [],
+        deleted: []
+    };
+    if(str1.length === 0 && str2.length === 0) {
+        return parts;
+    }
+    if(str1.length === 0) {
+        parts.added.push({
+            start: 0,
+            end: str2.length-1,
+            content: str2
+        });
+        return parts;
+    }
+    if(str2.length === 0) {
+        parts.deleted.push({
+            start: 0,
+            end: str1.length-1,
+            content: str1
+        });
+        return parts;
+    }
+    const result = commonPart(str1,str2,equals);
+    let match = result.match;
+    let same = [];
+    let start = 0;
+    match.forEach((m,i) => {
+        let next = match[i+1];
+        if(next && m.i + 1 === next.i && m.j + 1 === next.j) {
+            return;
+        }
+        same.push({
+            start: match[start],
+            end: m,
+            content: str1.slice(match[start].i,m.i+1)
+        });
+        start = i + 1;
+    });
+    same.push({
+        start: {
+            i: str1.length,
+            j: str2.length,
+        },
+        end: {
+            i: str1.length,
+            j: str2.length,
+        }
+    });
+    same.forEach((item,i) => {
+        let preItem = same[i-1] ? same[i-1].end : {i:-1,j:-1};
+        item = item.start;
+        // 增
+        if(item.i === preItem.i+1 && item.j !== preItem.j+1) {
+            parts.added.push({
+                start: preItem.j+1,
+                end: item.j - 1,
+                content: str2.slice(preItem.j+1,item.j)
+            });
+        }
+        // 删
+        if(item.i !== preItem.i+1 && item.j === preItem.j+1) {
+            parts.deleted.push({
+                start: preItem.i+1,
+                end: item.i - 1,
+                content: str1.slice(preItem.i+1,item.i)
+            });
+        }
+        // 改
+        if(item.i !== preItem.i+1 && item.j !== preItem.j+1) {
+            parts.modified.push({
+                old: {
+                    start: preItem.i+1,
+                    end: item.i - 1,
+                    content: str1.slice(preItem.i+1,item.i)
+                },
+                "new": {
+                    start: preItem.j+1,
+                    end: item.j - 1,
+                    content: str2.slice(preItem.j+1,item.j)
+                }
+            });
+        }
+    });
+    same.pop();
+    parts.same = same.map(item =>{
+        item.new = item.j;
+        item.old = item.i;
+        delete item.i;
+        delete item.j;
+        return item;
+    });
+    return parts;
+}
+document.getElementById('compare-btn').addEventListener("click",() => {
+    let origin = document.getElementById('origin-input').value;
+    let newInput = document.getElementById('new-input').value;
+    let ret = compare(origin,newInput);
+    let _ret = [];
+    for(let p in ret) {
+        let arr = ret[p];
+        switch (p) {
+            case 'added': {
+                arr.forEach(cfg => {
+                    let s = addContentFormat(escapeHTML(cfg.content));
+                    _ret.push({
+                        cnt: s,
+                        index: cfg.start
+                    })
+                })
+                break;
+            }
+            case 'deleted': {
+                arr.forEach(cfg => {
+                    let s = deleteContentFormat(escapeHTML(cfg.content));
+                    _ret.push({
+                        cnt: s,
+                        index: cfg.start
+                    })
+                })
+                break;
+            }
+            case 'modified': {
+                arr.forEach(cfg => {
+                    let s = modifyContentFormat(escapeHTML(cfg.old.content),escapeHTML(cfg.new.content));
+                    _ret.push({
+                        cnt: s,
+                        index: cfg.new.start
+                    })
+                })
+                break;
+            }
+            case 'same': {
+                arr.forEach(cfg => {
+                    let s = escapeHTML(cfg.content);
+                    _ret.push({
+                        cnt: s,
+                        index: cfg.start.j
+                    })
+                })
+                break;
+            }
+        }
+
+    }
+    _ret.sort((o1,o2) => {
+        return o1.index - o2.index;
+    })
+    console.log(ret);
+    document.getElementById('compare-result').innerHTML = _ret.map(o => o.cnt).join('')
+})
+function escapeHTML(str) {
+    let map = {
+        "<": '&lt;',
+        ">": '&gt;',
+        "\n": '<br>',
+        " ": '&nbsp;'
+    };
+    return str.replace(/[.\s]/g,(m) => {
+        return map[m] || m;
+    })
+}
+
+function deleteContentFormat(str) {
+    return `<span style="text-decoration: line-through;color: red">${str}</span>`
+}
+function addContentFormat(str) {
+    return `<span style="color: green">${str}</span>`
+}
+function modifyContentFormat(str1,str2) {
+    return `${deleteContentFormat(str1)}${addContentFormat(str2)}`
+}
